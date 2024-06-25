@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface BlogRepository extends JpaRepository<Blog, Long> {
     List<Blog> findByTags(String tag);
+    List<Blog> findByUserId(Integer userId);
+
 
 }

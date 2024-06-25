@@ -1,6 +1,7 @@
 package com.blog.application.model;
 
-import com.blog.application.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,8 +11,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -33,12 +36,19 @@ public class User implements UserDetails {
 
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore // Bu annotation JSON yanıtında bu alanın gösterilmemesini sağlar
+    private List<Blog> blogs = new ArrayList<>();
+
+    @JsonProperty("email") // Bu annotation, JSON çıktısında "email" alanını gösterir
+    public String getEmail() {
+        return email;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.blog.application.service;
 
 import com.blog.application.model.Blog;
+import com.blog.application.model.User;
 import com.blog.application.repository.BlogRepository;
+import com.blog.application.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +15,22 @@ public class BlogService {
     @Autowired
     private BlogRepository blogRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public List<Blog> getAllBlogs() {
         return blogRepository.findAll();
+    }
+
+
+    public Blog createBlog(Blog blog, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Invalid user email address" + email));
+        blog.setUser(user);
+        return blogRepository.save(blog);
+    }
+
+    public List<Blog> getUserBlogs(Integer userId) {
+        return blogRepository.findByUserId(userId);
     }
 
     public Blog getBlogById(Long id) {
@@ -22,9 +38,7 @@ public class BlogService {
         return optionalBlog.orElse(null);
     }
 
-    public Blog createBlog(Blog blog) {
-        return blogRepository.save(blog);
-    }
+
 
     public Blog updateBlog(Long id, Blog updatedBlogPost) {
         return blogRepository.findById(id).map(blogPost -> {

@@ -1,6 +1,5 @@
 package com.blog.application.service;
 
-import com.blog.application.Role;
 import com.blog.application.dao.request.SignUpRequest;
 import com.blog.application.dao.request.SigninRequest;
 import com.blog.application.dao.response.JwtAuthenticationResponse;
@@ -27,25 +26,22 @@ public class AuthenticationService {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
                 .build();
 
         User savedUser = userRepository.save(user);
 
         String jwt = jwtService.generateToken(savedUser);
-
         return JwtAuthenticationResponse.builder()
                 .token(jwt)
                 .build();
     }
 
-
     public JwtAuthenticationResponse signin(SigninRequest request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
-        var jwt = jwtService.generateToken(user);
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
+        String jwt = jwtService.generateToken(user);
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 

@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: taskdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+  spring-app:
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/taskdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: secret
+volumes:
+  mysql_data:
