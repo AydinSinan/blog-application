@@ -5,6 +5,8 @@ import com.blog.application.model.User;
 import com.blog.application.repository.BlogRepository;
 import com.blog.application.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +19,10 @@ public class BlogService {
 
     @Autowired
     private UserRepository userRepository;
+
+    public Page<Blog> getAllBlogs(Pageable pageable) {
+        return blogRepository.findAll(pageable);
+    }
 
     public List<Blog> getAllBlogs() {
         return blogRepository.findAll();

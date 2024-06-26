@@ -8,11 +8,11 @@ import com.blog.application.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +35,6 @@ public class BlogController {
     public ResponseEntity<Blog> getBlogById(@PathVariable Long id) {
         Blog blog = blogService.getBlogById(id);
         if (blog != null) {
-            // Kullanıcı bilgisini set etmeden geri döndürüyoruz
             return new ResponseEntity<>(blog, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -67,16 +66,16 @@ public ResponseEntity<Blog> createBlog(@AuthenticationPrincipal @RequestBody Cre
     return ResponseEntity.ok(createdBlog);
 }
 
-/*
-    @GetMapping
-    public ResponseEntity<List<Blog>> getUserBlogs(@AuthenticationPrincipal UserDetails userDetails) {
-        List<Blog> blogs = blogService.getUserBlogs(((User) userDetails).getId());
-        return ResponseEntity.ok(blogs);
-    }
-*/
+
     @GetMapping
     public ResponseEntity<List<Blog>> getAllBlogs() {
         List<Blog> blogs = blogService.getAllBlogs();
+        return ResponseEntity.ok(blogs);
+    }
+
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<Blog>> getAllBlogs(Pageable pageable) {
+        Page<Blog> blogs = blogService.getAllBlogs(pageable);
         return ResponseEntity.ok(blogs);
     }
 
