@@ -2,16 +2,13 @@ package com.blog.application.service;
 
 import com.blog.application.model.User;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.util.Date;
 
 import java.util.function.Function;
@@ -19,14 +16,6 @@ import java.util.function.Function;
 @Service
 public class JwtService {
     private final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-
-
-
-    private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
-
-    public String extractUserName(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
@@ -69,13 +58,7 @@ public class JwtService {
     }
 
 
-    private static final Key jwtSigningKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final long JWT_EXPIRATION = 1000 * 60 * 24;
 
-    private Key getSigningKey() {
-      //  return Keys.hmacShaKeyFor(keyBytes);
-        System.out.println(Keys.secretKeyFor(SignatureAlgorithm.HS256));
-        return Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    }
 }

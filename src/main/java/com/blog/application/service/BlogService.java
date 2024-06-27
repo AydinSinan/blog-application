@@ -20,6 +20,7 @@ public class BlogService {
     @Autowired
     private UserRepository userRepository;
 
+
     public Page<Blog> getAllBlogs(Pageable pageable) {
         return blogRepository.findAll(pageable);
     }
@@ -28,23 +29,16 @@ public class BlogService {
         return blogRepository.findAll();
     }
 
-
     public Blog createBlog(Blog blog, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Invalid user email address" + email));
         blog.setUser(user);
         return blogRepository.save(blog);
     }
 
-    public List<Blog> getUserBlogs(Integer userId) {
-        return blogRepository.findByUserId(userId);
-    }
-
     public Blog getBlogById(Long id) {
         Optional<Blog> optionalBlog = blogRepository.findById(id);
         return optionalBlog.orElse(null);
     }
-
-
 
     public Blog updateBlog(Long id, Blog updatedBlogPost) {
         return blogRepository.findById(id).map(blogPost -> {
@@ -54,7 +48,6 @@ public class BlogService {
         }).orElseThrow(() -> new RuntimeException("Post not found"));
     }
 
-// transactional
     public void deleteBlog(Long id) {
         blogRepository.deleteById(id);
     }
@@ -77,4 +70,14 @@ public class BlogService {
         return blogRepository.findByTags(tag);
     }
 
+    public void addS3ObjectUrlToBlog(Long blogId, String s3ObjectUrl) {
+        Optional<Blog> optionalBlog = blogRepository.findById(blogId);
+        if (optionalBlog.isPresent()) {
+            Blog blog = optionalBlog.get();
+            blog.setS3ObjectUrl(s3ObjectUrl);
+            blogRepository.save(blog);
+        } else {
+            throw new IllegalArgumentException("Blog not found with id: " + blogId);
+        }
+    }
 }
