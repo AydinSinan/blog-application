@@ -26,5 +26,19 @@ public class Blog {
     @ElementCollection
     private Set<String> tags = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    private String s3ObjectUrl; // S3'den gelen URL için alan
+
+
+    public Blog(Long id, String title, String text, Set<String> tags) {
+        this.id = id;
+        this.title = title;
+        this.text = text;
+        this.tags = tags;
+    }
+
 }
 

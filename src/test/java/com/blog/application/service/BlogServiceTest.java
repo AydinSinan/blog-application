@@ -1,7 +1,9 @@
 package com.blog.application.service;
 
 import com.blog.application.model.Blog;
+import com.blog.application.model.User;
 import com.blog.application.repository.BlogRepository;
+import com.blog.application.repository.UserRepository;
 import com.blog.application.service.BlogService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,9 @@ public class BlogServiceTest {
 
     @Mock
     private BlogRepository blogRepository;
+
+    @Mock
+    private UserRepository userRepository;
 
     @InjectMocks
     private BlogService blogService;
@@ -63,16 +68,20 @@ public class BlogServiceTest {
     void testCreateBlog() {
         // Given
         Blog newBlog = new Blog(null, "New Title", "New Text", new HashSet<>());
+        User user = new User();
+        user.setId(1);
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(blogRepository.save(newBlog)).thenReturn(newBlog);
 
         // When
-        Blog result = blogService.createBlog(newBlog);
+        Blog result = blogService.createBlog(newBlog, user.getEmail());
 
         // Then
         assertNotNull(result);
-        assertEquals("New Title", result.getTitle());
+        verify(userRepository, times(1)).findById(user.getId());
         verify(blogRepository, times(1)).save(newBlog);
     }
+
 
     @Test
     void testUpdateBlog() {
