@@ -1,6 +1,6 @@
-package com.blog.application.repository;
+package com.microservice.userservice.repository;
 
-import com.blog.application.model.User;
+import com.microservice.userservice.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

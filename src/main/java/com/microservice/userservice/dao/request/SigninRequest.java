@@ -1,4 +1,4 @@
-package com.blog.application.dao.request;
+package com.microservice.userservice.dao.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +12,4 @@ import lombok.NoArgsConstructor;
 public class SigninRequest {
     private String username;
     private String password;
-
-
 }

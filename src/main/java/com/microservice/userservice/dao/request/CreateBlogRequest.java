@@ -1,4 +1,4 @@
-package com.blog.application.dao.request;
+package com.microservice.userservice.dao.request;
 
 import lombok.Getter;
 import lombok.Setter;

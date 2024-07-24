@@ -1,7 +1,7 @@
-package com.blog.application.service;
+package com.microservice.userservice.service;
 
-import com.blog.application.model.User;
-import com.blog.application.repository.UserRepository;
+import com.microservice.userservice.model.User;
+import com.microservice.userservice.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

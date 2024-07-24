@@ -1,10 +1,10 @@
-package com.blog.application.service;
+package com.microservice.userservice.service;
 
-import com.blog.application.dao.request.SignUpRequest;
-import com.blog.application.dao.request.SigninRequest;
-import com.blog.application.dao.response.JwtAuthenticationResponse;
-import com.blog.application.model.User;
-import com.blog.application.repository.UserRepository;
+import com.microservice.userservice.dao.request.SignUpRequest;
+import com.microservice.userservice.dao.request.SigninRequest;
+import com.microservice.userservice.dao.response.JwtAuthenticationResponse;
+import com.microservice.userservice.model.User;
+import com.microservice.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,18 +30,18 @@ public class AuthenticationService {
 
         User savedUser = userRepository.save(user);
 
-        String jwt = jwtService.generateToken(savedUser);
+        String jwt = jwtService.generateToken(savedUser); // getUsername
         return JwtAuthenticationResponse.builder()
                 .token(jwt)
                 .build();
     }
 
-    public JwtAuthenticationResponse signin(SigninRequest request) {
+    public JwtAuthenticationResponse login(SigninRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
-        String jwt = jwtService.generateToken(user);
+        String jwt = jwtService.generateToken(user); // getUsername
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 

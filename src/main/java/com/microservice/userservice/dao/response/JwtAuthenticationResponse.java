@@ -1,4 +1,4 @@
-package com.blog.application.dao.response;
+package com.microservice.userservice.dao.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

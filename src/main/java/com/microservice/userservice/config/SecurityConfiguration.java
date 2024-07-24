@@ -1,8 +1,8 @@
-package com.blog.application.config;
+package com.microservice.userservice.config;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-import com.blog.application.service.UserService;
+import com.microservice.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

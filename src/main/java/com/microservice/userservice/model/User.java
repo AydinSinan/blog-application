@@ -1,4 +1,4 @@
-package com.blog.application.model;
+package com.microservice.userservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,21 +31,14 @@ public class User implements UserDetails {
 
     @Column(unique = true, nullable = false)
     private String email;
-
     @Column(unique = true, nullable = false)
     private String username;
-
     private String password;
 
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore // Bu annotation JSON yanıtında bu alanın gösterilmemesini sağlar
-    private List<Blog> blogs = new ArrayList<>();
-
-    @JsonProperty("email") // Bu annotation, JSON çıktısında "email" alanını gösterir
-    public String getEmail() {
-        return email;
-    }
+    //@OneToMany(mappedBy = "user")
+    //@JsonIgnore
+    //private List<Blog> blogs = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -53,7 +47,11 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        if (username != null) {
+            return username;
+        } else {
+            throw new UsernameNotFoundException("Username not found here user service");
+        }
     }
 
     @Override
